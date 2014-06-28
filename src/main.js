@@ -8,10 +8,13 @@ define(function(require, exports, module) {
     var Easing = require('famous/transitions/Easing');
     var ImageSurface = require('famous/surfaces/ImageSurface');
     var SpringTransition = require('famous/transitions/SpringTransition');
+    var Timer = require('famous/utilities/Timer');
 
     var finalTransform = Transform.identity; 
     var initialTransform = Transform.translate(0, window.innerHeight * 5, 0);
     var yPosition = new Transitionable(initialTransform);
+    var logoYPosition = new Transitionable(initialTransform);
+    var formYPosition = new Transitionable(initialTransform);
 
     Transitionable.registerMethod('spring', SpringTransition);
 
@@ -41,16 +44,20 @@ define(function(require, exports, module) {
       origin: [0.5, 0.5]
     });
 
-    var groupModifier = new Modifier({
+    var formAnimationModifier = new Modifier({
       transform: function() {
-        return yPosition.get()
+        return formYPosition.get();
       }
     });
 
-    var groupNode = mainContext.add(groupModifier);
+    var logoAnimationModifier = new Modifier({
+      transform: function() {
+        return logoYPosition.get();
+      }
+    });
 
-    groupNode.add(logoModifier).add(logo);
-    groupNode.add(formPositionModifier).add(form);
+    mainContext.add(logoAnimationModifier).add(logoModifier).add(logo);
+    mainContext.add(formAnimationModifier).add(formPositionModifier).add(form);
 
     var transition = {
       period: 500,
@@ -58,5 +65,9 @@ define(function(require, exports, module) {
       dampingRatio: 0.7
     }; 
 
-    yPosition.set(finalTransform, transition);
+    Timer.setTimeout(function() {
+      formYPosition.set(finalTransform, transition);
+    }, 100);
+
+    logoYPosition.set(finalTransform, transition);
 });
