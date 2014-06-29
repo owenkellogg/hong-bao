@@ -10,64 +10,257 @@ define(function(require, exports, module) {
     var SpringTransition = require('famous/transitions/SpringTransition');
     var Timer = require('famous/utilities/Timer');
 
-    var finalTransform = Transform.identity; 
+    // create the main context
+    var mainContext = Engine.createContext();
+
     var initialTransform = Transform.translate(0, window.innerHeight * 5, 0);
-    var yPosition = new Transitionable(initialTransform);
+    var middleTransform = Transform.identity; 
+    var finalTransform = Transform.translate(0, -(window.innerHeight * 5), 0);
     var logoYPosition = new Transitionable(initialTransform);
     var formYPosition = new Transitionable(initialTransform);
 
     Transitionable.registerMethod('spring', SpringTransition);
 
-    // create the main context
-    var mainContext = Engine.createContext();
-
-    // your app here
-    var logo = new ImageSurface({
-        content: '/img/ripple-logo.jpg',
-        classes: ['double-sided']
-    });
-
-    var form = new Surface({
-      content: '<form><label for="rippleName">Login with Ripple Name</label></input><input type="text" name="rippleName"/></form>'
-    });
-
-    var formPositionModifier = new Modifier({
-      size: [200, 200],
-      align: [0.5, 0.3],
-      transform: Transform.translate(0, 200, 0),
-      origin: [0.5, 0.5]
-    });
-
-    var logoModifier = new Modifier({
-      size: [200, 200],
-      align: [0.49, 0.3],
-      origin: [0.5, 0.5]
-    });
-
-    var formAnimationModifier = new Modifier({
-      transform: function() {
-        return formYPosition.get();
+    function PaypalView() {
+      var self = this;
+      this.position = new Transitionable(initialTransform);
+      this.template = document.getElementById('paypalTemplate');
+      this.surface = new Surface({
+        content: _.template(this.template.innerHTML)()
+      });
+      this.animationModifier = new Modifier({
+        transform: function() {
+          return self.position.get();
+        }
+      });
+      this.positionModifier = new Modifier({
+        size: [300, 200],
+        align: [0.5, 0.5],
+        origin: [0.5, 1.0]
+      });
+      this.surface.on('click', function(event) {
+        self.close();
+      });
+    }
+    PaypalView.prototype = {
+      addToContext: function(context) {
+        context
+          .add(this.positionModifier)
+          .add(this.animationModifier)
+          .add(this.surface);
+      },
+      open: function() {
+        var transition = {
+          period: 500,
+          method: 'spring',
+          dampingRatio: 0.7
+        }; 
+        this.position.set(middleTransform, transition);
+      },
+      close: function() {
+        var self = this;
+        var template = document.getElementById('redirectingTemplate');
+        self.surface.setContent(_.template(template.innerHTML)());
       }
-    });
+    };
 
-    var logoAnimationModifier = new Modifier({
-      transform: function() {
-        return logoYPosition.get();
+    function AccountView() {
+      var self = this;
+      this.position = new Transitionable(initialTransform);
+      this.template = document.getElementById('accountTemplate');
+      this.surface = new Surface({
+        content: _.template(this.template.innerHTML)({
+          address: 'rippleAddress...',
+          secretKey: 'rippleSecretKey...'
+        })
+      });
+      this.animationModifier = new Modifier({
+        transform: function() {
+          return self.position.get();
+        }
+      });
+      this.positionModifier = new Modifier({
+        size: [200, 200],
+        align: [0.5, 0.5],
+        origin: [0.5, 1.0]
+      });
+      this.surface.on('click', function(event) {
+        self.close();
+      });
+    }
+    AccountView.prototype = {
+      open: function() {
+        var transition = {
+          period: 500,
+          method: 'spring',
+          dampingRatio: 0.7
+        }; 
+        this.position.set(middleTransform, transition);
+      },
+      close: function() {
+        var self = this;
+        var transition = {
+          duration: 500,
+          curve: function(t) {
+            return Easing.inBack(t, 0.8);
+          }
+        }; 
+        self.position.set(finalTransform, transition, function() {
+          paypalView.open();
+        });
+      },
+      addToContext: function(context) {
+        context
+          .add(this.positionModifier)
+          .add(this.animationModifier)
+          .add(this.surface);
       }
-    });
+    }
 
-    mainContext.add(logoAnimationModifier).add(logoModifier).add(logo);
-    mainContext.add(formAnimationModifier).add(formPositionModifier).add(form);
+    function SecretView() {
+      var self = this;
+      this.position = new Transitionable(initialTransform);
+      this.template = document.getElementById('secretTemplate');
+      this.surface = new Surface({
+        content: _.template(this.template.innerHTML)({ secretKey: 'rippleSecretKey...' })
+      });
+      this.surface.on('click', function(event) {
+        self.close();
+      });
+      this.animationModifier = new Modifier({
+        transform: function() {
+          return self.position.get();
+        }
+      });
+      this.positionModifier = new Modifier({
+        size: [200, 200],
+        align: [0.5, 0.5],
+        origin: [0.5, 1.0]
+      });
+    }
+    SecretView.prototype = {
+      open: function() {
+        var transition = {
+          period: 500,
+          method: 'spring',
+          dampingRatio: 0.7
+        }; 
+        this.position.set(middleTransform, transition);
+      },
+      close: function() {
+        var self = this;
+        var transition = {
+          duration: 500,
+          curve: function(t) {
+            return Easing.inBack(t, 0.8);
+          }
+        }; 
+        self.position.set(finalTransform, transition, function() {
+          accountView.open();
+        });
+      },
+      addToContext: function(context) {
+        context
+          .add(this.positionModifier)
+          .add(this.animationModifier)
+          .add(this.surface);
+      }
+    };
+       
+    function LaunchView() {
+      var self = this;
+      this.template = document.getElementById('launchTemplate');
+      this.surface = new Surface({
+        content: _.template(this.template.innerHTML)()
+      });
+      this.animationModifier = new Modifier({
+        transform: function() {
+          return formYPosition.get();
+        }
+      });
+      this.positionModifier = new Modifier({
+        size: [300, 200],
+        align: [0.5, 0.3],
+        transform: Transform.translate(0, 200, 0),
+        origin: [0.5, 0.5]
+      });
+      this.surface.on('click', function(event) {
+        self.close();
+      });
+    }
+    LaunchView.prototype = {
+      open: function() {
+        var transition = {
+          period: 500,
+          method: 'spring',
+          dampingRatio: 0.7
+        }; 
+        Timer.setTimeout(function() {
+          formYPosition.set(middleTransform, transition);
+        }, 100);
+        logoYPosition.set(middleTransform, transition);
+      },
+      close: function() {
+        var transition = {
+          duration: 500,
+          curve: function(t) {
+            return Easing.inBack(t, 0.8);
+          }
+        }; 
+        Timer.setTimeout(function() {
+          formYPosition.set(finalTransform, transition, function() {
+            secretView.open();
+          });
+        }, 100);
+        logoYPosition.set(finalTransform, transition);
+      },
+      addToContext: function(context) {
+        context
+          .add(this.animationModifier)
+          .add(this.positionModifier)
+          .add(this.surface);
+      }
+    };
 
-    var transition = {
-      period: 500,
-      method: 'spring',
-      dampingRatio: 0.7
-    }; 
+    function LogoView() {
+      this.positionModifier = new Modifier({
+        size: [200, 200],
+        align: [0.47, 0.3],
+        origin: [0.5, 0.5]
+      });
+      this.animationModifier = new Modifier({
+        transform: function() {
+          return logoYPosition.get();
+        }
+      });
+      this.surface = new ImageSurface({
+          content: '/img/ripple-logo.jpg',
+          classes: ['double-sided']
+      });
+    }
+    LogoView.prototype = {
+      addToContext: function(context) {
+        context
+          .add(this.animationModifier)
+          .add(this.positionModifier)
+          .add(this.surface);
+      }
+    };
 
-    Timer.setTimeout(function() {
-      formYPosition.set(finalTransform, transition);
-    }, 100);
+    var logoView = new LogoView();
+    logoView.addToContext(mainContext);
 
-    logoYPosition.set(finalTransform, transition);
+    var secretView = new SecretView();
+    secretView.addToContext(mainContext);
+
+    var accountView = new AccountView();
+    accountView.addToContext(mainContext);
+
+    var paypalView = new PaypalView();
+    paypalView.addToContext(mainContext);
+
+    var launchView = new LaunchView();
+    launchView.addToContext(mainContext);
+    launchView.open();
+
 });

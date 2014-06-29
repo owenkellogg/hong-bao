@@ -12,6 +12,10 @@
         <script type="text/javascript" src="http://code.famo.us/lib/classList.js"></script>
         <script type="text/javascript" src="http://code.famo.us/lib/requestAnimationFrame.js"></script>
 
+        <script type="text/javascript" src="/lib/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="/lib/underscore-min.js"></script>
+        <script type="text/javascript" src="/lib/backbone-min.js"></script>
+
         <!-- module loader -->
         <script type="text/javascript" src="http://code.famo.us/lib/require.js"></script>
 
@@ -25,6 +29,46 @@
             require.config({baseUrl: 'src/'});
             require(['main']);
         </script>
+
+        <script type='text/template' id='launchTemplate'>
+          <h1>Ripple Launch</h1> 
+          <p>
+            A Ripple wallet allows you to own assets on the Ripple network.
+          </p>
+
+          <button>Get a Ripple Wallet</button>
+        </script>
+
+        <script type='text/template' id='secretTemplate'>
+          <p>Your Ripple Secret controls the assets in your account</p> 
+          <div class='well'><h2><%= secretKey %></h2></div>
+          <p>Copy the Ripple Secret above to a secure location, you will not be able to recover your Ripple Secret if lost.</p>
+        </script>
+
+        <script type='text/template' id='accountTemplate'>
+          <p>Now people can send assets to your Ripple Address below:</p> 
+          <div class='well'><h2><%= address %></h2></div>
+          <div class='well'><h4><%= secretKey %></h4></div>
+          <p>And you can transfer the asserts with your Ripple Secret.</p>
+        </script>
+
+        <script type='text/template' id='redirectingTemplate'>
+          <h4>Redirecting to Paypal...</h4>
+        </script>
+
+        <script type='text/template' id='paypalTemplate'>
+          <h1>Finally... fund your Ripple account</h1>
+          <p>In order start using Ripple your wallet needs some XRP.<p>
+          <h3>Buy now 100 XRP for $2<h3>
+          <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+          <input type="hidden" name="cmd" value="_s-xclick">
+          <input type="hidden" name="hosted_button_id" value="S78EDEBQSFZCY">
+          <input type="hidden" name="notify_url" value="https://ec2-50-17-39-241.compute-1.amazonaws.com/callbacks/paypal">
+          <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+          <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+          </form>
+        <script>
     </head>
-    <body></body>
+   <body>
+    </body>
 </html>
