@@ -268,8 +268,6 @@ define(function(require, exports, module) {
       }
     };
 
-    var wallet = ripple.Wallet.generate();
-
     var logoView = new LogoView();
     logoView.addToContext(mainContext);
 

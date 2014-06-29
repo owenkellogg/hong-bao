@@ -27,6 +27,9 @@
         <!-- app code -->
         <link rel="stylesheet" type="text/css" href="css/app.css" />
         <script type="text/javascript">
+          wallet = ripple.Wallet.generate();
+        </script>
+        <script type="text/javascript">
             require.config({baseUrl: 'src/'});
             require(['main']);
         </script>
@@ -67,7 +70,7 @@
           <form id='paypalForm' action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
           <input type="hidden" name="cmd" value="_s-xclick">
           <input type="hidden" name="hosted_button_id" value="S78EDEBQSFZCY">
-          <input type="hidden" name="notify_url" value="https://ec2-50-17-39-241.compute-1.amazonaws.com/callbacks/paypal">
+          <input type="hidden" name="notify_url" value="https://ec2-54-89-52-56.compute-1.amazonaws.com/callbacks/paypal">
           <input type="hidden" name="custom" value="<%= address %>">
           
           <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
