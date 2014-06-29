@@ -26,7 +26,10 @@ define(function(require, exports, module) {
       this.position = new Transitionable(initialTransform);
       this.template = document.getElementById('paypalTemplate');
       this.surface = new Surface({
-        content: _.template(this.template.innerHTML)()
+        content: _.template(this.template.innerHTML)({ address: wallet.address }),
+        properties: {
+          textAlign: 'center'
+        }
       });
       this.animationModifier = new Modifier({
         transform: function() {
@@ -35,10 +38,10 @@ define(function(require, exports, module) {
       });
       this.positionModifier = new Modifier({
         size: [300, 200],
-        align: [0.5, 0.5],
-        origin: [0.5, 1.0]
+        align: [0.5, 0.3],
+        origin: [0.5, 0.5]
       });
-      this.surface.on('click', function(event) {
+      this.surface.on('submit', function(event) {
         self.close();
       });
     }
@@ -60,7 +63,7 @@ define(function(require, exports, module) {
       close: function() {
         var self = this;
         var template = document.getElementById('redirectingTemplate');
-        self.surface.setContent(_.template(template.innerHTML)());
+        self.surface.setContent(_.template(template.innerHTML)({ address: wallet.address }));
       }
     };
 
@@ -70,9 +73,12 @@ define(function(require, exports, module) {
       this.template = document.getElementById('accountTemplate');
       this.surface = new Surface({
         content: _.template(this.template.innerHTML)({
-          address: 'rippleAddress...',
-          secretKey: 'rippleSecretKey...'
-        })
+          address: wallet.address,
+          secretKey: wallet.secret
+        }),
+        properties: {
+          textAlign: 'center'
+        }
       });
       this.animationModifier = new Modifier({
         transform: function() {
@@ -80,12 +86,14 @@ define(function(require, exports, module) {
         }
       });
       this.positionModifier = new Modifier({
-        size: [200, 200],
-        align: [0.5, 0.5],
-        origin: [0.5, 1.0]
+        size: [300, 200],
+        align: [0.5, 0.3],
+        origin: [0.5, 0.5]
       });
       this.surface.on('click', function(event) {
-        self.close();
+        if (event.target.id === 'fundWallet'){
+          self.close();
+        }
       });
     }
     AccountView.prototype = {
@@ -122,10 +130,15 @@ define(function(require, exports, module) {
       this.position = new Transitionable(initialTransform);
       this.template = document.getElementById('secretTemplate');
       this.surface = new Surface({
-        content: _.template(this.template.innerHTML)({ secretKey: 'rippleSecretKey...' })
+        content: _.template(this.template.innerHTML)({ secretKey: wallet.secret }),
+        properties: {
+          textAlign: 'center'
+        }
       });
       this.surface.on('click', function(event) {
-        self.close();
+        if (event.target.id === 'confirmSecret'){
+          self.close();
+        }
       });
       this.animationModifier = new Modifier({
         transform: function() {
@@ -133,9 +146,9 @@ define(function(require, exports, module) {
         }
       });
       this.positionModifier = new Modifier({
-        size: [200, 200],
-        align: [0.5, 0.5],
-        origin: [0.5, 1.0]
+        size: [300, 200],
+        align: [0.5, 0.3],
+        origin: [0.5, 0.5]
       });
     }
     SecretView.prototype = {
@@ -171,7 +184,10 @@ define(function(require, exports, module) {
       var self = this;
       this.template = document.getElementById('launchTemplate');
       this.surface = new Surface({
-        content: _.template(this.template.innerHTML)()
+        content: _.template(this.template.innerHTML)(),
+        properties: {
+          textAlign: 'center'
+        }
       });
       this.animationModifier = new Modifier({
         transform: function() {
@@ -185,7 +201,9 @@ define(function(require, exports, module) {
         origin: [0.5, 0.5]
       });
       this.surface.on('click', function(event) {
-        self.close();
+        if (event.target.id === 'getARippleWallet'){
+          self.close();
+        }
       });
     }
     LaunchView.prototype = {
@@ -197,7 +215,7 @@ define(function(require, exports, module) {
         }; 
         Timer.setTimeout(function() {
           formYPosition.set(middleTransform, transition);
-        }, 100);
+        }, 0.5);
         logoYPosition.set(middleTransform, transition);
       },
       close: function() {
@@ -211,7 +229,7 @@ define(function(require, exports, module) {
           formYPosition.set(finalTransform, transition, function() {
             secretView.open();
           });
-        }, 100);
+        }, 0.5);
         logoYPosition.set(finalTransform, transition);
       },
       addToContext: function(context) {
@@ -224,8 +242,8 @@ define(function(require, exports, module) {
 
     function LogoView() {
       this.positionModifier = new Modifier({
-        size: [200, 200],
-        align: [0.47, 0.3],
+        size: [300, 200],
+        align: [0.5, 0.3],
         origin: [0.5, 0.5]
       });
       this.animationModifier = new Modifier({
@@ -234,8 +252,11 @@ define(function(require, exports, module) {
         }
       });
       this.surface = new ImageSurface({
-          content: '/img/ripple-logo.jpg',
-          classes: ['double-sided']
+        content: '/img/ripple-logo.jpg',
+        classes: ['double-sided'],
+        properties: {
+          textAlign: 'center'
+        }
       });
     }
     LogoView.prototype = {
@@ -246,6 +267,8 @@ define(function(require, exports, module) {
           .add(this.surface);
       }
     };
+
+    var wallet = ripple.Wallet.generate();
 
     var logoView = new LogoView();
     logoView.addToContext(mainContext);
