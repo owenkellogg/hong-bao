@@ -211,11 +211,11 @@ define(function(require, exports, module) {
         var transition = {
           period: 500,
           method: 'spring',
-          dampingRatio: 0.7
+          dampingRatio: 0.75
         }; 
         Timer.setTimeout(function() {
           formYPosition.set(middleTransform, transition);
-        }, 0.5);
+        }, 150);
         logoYPosition.set(middleTransform, transition);
       },
       close: function() {
@@ -229,7 +229,7 @@ define(function(require, exports, module) {
           formYPosition.set(finalTransform, transition, function() {
             secretView.open();
           });
-        }, 0.5);
+        }, 500);
         logoYPosition.set(finalTransform, transition);
       },
       addToContext: function(context) {
@@ -252,7 +252,7 @@ define(function(require, exports, module) {
         }
       });
       this.surface = new ImageSurface({
-        content: '/img/ripple-logo.jpg',
+        content: './img/ripple-logo.jpg',
         classes: ['double-sided'],
         properties: {
           textAlign: 'center'
@@ -265,11 +265,15 @@ define(function(require, exports, module) {
           .add(this.animationModifier)
           .add(this.positionModifier)
           .add(this.surface);
+      },
+      open: function() {
+
       }
     };
 
     var logoView = new LogoView();
     logoView.addToContext(mainContext);
+    logoView.open();
 
     var secretView = new SecretView();
     secretView.addToContext(mainContext);
@@ -280,8 +284,10 @@ define(function(require, exports, module) {
     var paypalView = new PaypalView();
     paypalView.addToContext(mainContext);
 
-    var launchView = new LaunchView();
-    launchView.addToContext(mainContext);
-    launchView.open();
-
+    
+    Timer.setTimeout(function() {
+      var launchView = new LaunchView();
+      launchView.addToContext(mainContext);
+      launchView.open();
+    }, 300);
 });
