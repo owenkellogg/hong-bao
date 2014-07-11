@@ -252,7 +252,7 @@ define(function(require, exports, module) {
         }
       });
       this.surface = new ImageSurface({
-        content: './img/ripple-logo.jpg',
+        content: './img/ripple_attribution_badge_blue.png',
         classes: ['double-sided'],
         properties: {
           textAlign: 'center'
