@@ -1,0 +1,27 @@
+{
+  "name": "ripplelaunch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/stevenzeiler/ripplelaunch.com.git"
+  },
+  "author": "Steven Zeiler",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stevenzeiler/ripplelaunch.com/issues"
+  },
+  "homepage": "https://github.com/stevenzeiler/ripplelaunch.com",
+  "dependencies": {
+    "body-parser": "^1.5.2",
+    "express": "^4.7.4",
+    "ejs": "^1.0.0"
+  }
+}
