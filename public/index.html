@@ -1,6 +1,11 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
     <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>Ripple Launch</title>
         <meta name="description" content="Start Ripple Account and Buy XRP">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -12,90 +17,90 @@
         <link rel="apple-touch-icon" sizes="120x120" href="/img/touch-icon-iphone-retina.png">
         <link rel="apple-touch-icon" sizes="152x152" href="/img/touch-icon-ipad-retina.png">
 
-        <!-- shims for backwards compatibility -->
-        <script type="text/javascript" src="https://code.famo.us/lib/functionPrototypeBind.js"></script>
-        <script type="text/javascript" src="https://code.famo.us/lib/classList.js"></script>
-        <script type="text/javascript" src="https://code.famo.us/lib/requestAnimationFrame.js"></script>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <style>
+            body {
+                padding-top: 50px;
+                padding-bottom: 20px;
+            }
+        </style>
+        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css/main.css">
 
-        <script type="text/javascript" src="./lib/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="./lib/ripple-0.7.38-min.js"></script>
+        <script src="/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <div style='background-color:black;' class="navbar navbar-inverse navbar-top" role="navigation">
+
+      <p style='text-align:center; margin-top:10px;'>
+        <img style='text-align:center; height:50px' src='/img/ripple-rocket-150x150.png'/> 
+        <span style='font-size:150%; color:white'>Ripple Launch</span> 
+      </p>
+    </div>
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-4 center" style='text-align:center' id='main-content'>
+        </div>
+        <div class="col-md-4">
+        </div>
+      </div>
+
+      <footer>
+        <br/>
+        <p style='margin-top:30px;text-align:center' class='center'>&copy; Zen Enterprises, LLC 2014</p>
+      </footer>
+    </div> <!-- /container -->        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.0.min.js"><\/script>')</script>
+
+        <script src="/vendor/bootstrap.min.js"></script>
+        <script src="https://checkout.stripe.com/checkout.js"></script>
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+            e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+            e.src='//www.google-analytics.com/analytics.js';
+            r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+            ga('create','UA-XXXXX-X');ga('send','pageview');
+        </script>
+        <script type='text/template' id='mainTemplate'>
+          <p>Your new ripple address is</p> 
+          <div class='well'><h6><%= address %></h6></div>
+          <p>Your new ripple secret is</p>
+          <div class='well'><h6><%= secretKey %></h6></div>
+          </span>
+          <div class='center' style='text-align:center'>
+            <h3>320 XRP for $2<h3>
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+            <input type="hidden" name="cmd" value="_s-xclick">
+            <input type="hidden" name="hosted_button_id" value="F3MTCBQLYE46L">
+            <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+            <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+            <input type="hidden" name="RETURNURL" value="https://ripple.com/graph/#<%= address %>">
+            <input type="hidden" name="CANCELURL" value="https://ripple.com/graph/#<%= address %>">
+            <input type="hidden" name="notify_url" value="https://ripplelaunch.com/callbacks/paypal">
+            <input type="hidden" name="custom" value="<%= address %>">
+            </form>
+          </div>
+        <script>
+        <script src="js/start.js"></script>
         <script type="text/javascript" src="./lib/underscore-min.js"></script>
         <script type="text/javascript" src="./lib/backbone-min.js"></script>
-        <script type="text/javascript" src="./lib/ripple-0.7.38-min.js"></script>
-
-        <!-- module loader -->
-        <script type="text/javascript" src="https://code.famo.us/lib/require.js"></script>
-
-        <!-- famous -->
-        <link rel="stylesheet" type="text/css" href="https://code.famo.us/famous/0.2/famous.css" />
-        <script type="text/javascript" src="https://code.famo.us/famous/0.2/famous.min.js"></script>
-
-        <!-- app code -->
-        <link rel="stylesheet" type="text/css" href="css/app.css" />
-  <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-  <script>
-      (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-      e.src='//www.google-analytics.com/analytics.js';
-      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-      ga('create','UA-36236651-6');ga('send','pageview');
-  </script>
-    </head>
-   <body>
-    </body>
-        <script type="text/javascript">
-          wallet = ripple.Wallet.generate();
-        </script>
-        <script type="text/javascript">
-            require.config({baseUrl: 'src/'});
-            require(['main']);
-        </script>
-
-        <script type='text/template' id='launchTemplate'>
-          <h1>Ripple Launch</h1> 
-          <p>
-            A Ripple wallet allows you to own assets on the Ripple network.
-          </p>
-
-          <button id='getARippleWallet'>Get a Ripple Wallet</button>
-          <br/><br/><br/>
-          <small>**Not afiliated with Ripple Labs**</small>
-        </script>
-
-        <script type='text/template' id='secretTemplate'>
-          <p>Your Ripple Secret controls the assets in your account</p> 
-          <div class='well'><h4><%= secretKey %></h4></div>
-          <p>Copy the Ripple Secret above to a secure location, you will not be able to recover your Ripple Secret if lost.</p>
-          <button id='confirmSecret'>I promise I safely recorded my Ripple Secret</button>
-        </script>
-
-        <script type='text/template' id='accountTemplate'>
-          <p>Now people can send assets to your Ripple Address below:</p> 
-          <div class='well'><h4><%= address %></h4></div>
-          <p>And you can transfer the assets with your Ripple Secret.</p>
-          <button id='fundWallet'>Fund my wallet</button>
-        </script>
-
-        <script type='text/template' id='redirectingTemplate'>
-          <h1>Redirecting to Paypal...</h4>
-          <p>Upon payment 100 XRP will be sent to your new Ripple Address:</p>
-          <p><%= address %></p>
-        </script>
-
-        <script type='text/template' id='paypalTemplate'>
-          <h1>Finally... fund your Ripple account</h1>
-          <p>In order start using Ripple your wallet needs some XRP.<p>
-          <h3>Buy now 100 XRP for $2<h3>
-          <form id='paypalForm' action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-          <input type="hidden" name="cmd" value="_s-xclick">
-          <input type="hidden" name="hosted_button_id" value="S78EDEBQSFZCY">
-          <input type="hidden" name="RETURNURL" value="https://ripple.com/graph/#<%= address %>">
-          <input type="hidden" name="CANCELURL" value="https://ripple.com/graph/#<%= address %>">
-          <input type="hidden" name="notify_url" value="https://ripplelaunch.com/callbacks/paypal">
-          <input type="hidden" name="custom" value="<%= address %>">
-          
-          <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-          <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-          </form>
         <script>
+          var rippleWallet = ripple.Wallet.generate();
+          var content = _.template($('#mainTemplate').html(), {
+            address: rippleWallet.address,
+            secretKey: rippleWallet.secret
+          });
+          $('#main-content').html(content);
+        </script>
+    </body>
 </html>
