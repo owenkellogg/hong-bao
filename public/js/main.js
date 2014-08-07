@@ -6,12 +6,26 @@ $(function() {
   }
 
   var handler = StripeCheckout.configure({
-    key: 'pk_test_6pRNASCoBOKtIshFeQd4XMUh',
+    key: 'pk_test_NYwm9XdrPXhV9RGCurabqrKc',
     image: '/img/ripple-rocket-150x150.png',
     token: function(token) {
-      alert(token.id);
-      // Use the token to create the charge with a server-side script.
-      // You can access the token ID with `token.id`
+      $.ajax({
+        url: '/stripe',
+        type: 'POST',
+        data: {
+          stripeToken: token.id,
+          rippleAddress: 'r4EwBWxrx5HxYRyisfGzMto3AT8FZiYdWk',
+          amount: 2
+        },
+        success: function(response){
+          console.log('SUCCESS', response);
+          alert('success');
+        },
+        error: function(error){
+          console.log('ERROR', error);
+          alert('error');
+        }
+      });
     }
   });
 
