@@ -5,6 +5,28 @@ $(function() {
       evaluate: /\{\{(.+?)\}\}/g
   };  
 
+  var Router = Backbone.Router.extend({
+    routes: {
+      "": "index",
+      ":name": "nameLookup",
+    },
+    index: function() {
+      $('.nameForm').show();
+      $('.prices').hide();
+      $('#rippleName').html('');
+    },
+    nameLookup: function(name) {
+      $('.nameForm').hide();
+      $('.prices').show();
+      $('#rippleName').html(name);
+    }
+  });
+
+  var router = new Router();
+
+  Backbone.history.start({ pushState: false });
+  router.navigate('/', { trigger: true });
+
   var STRIPE_API_PUBLIC_KEY='pk_test_NYwm9XdrPXhV9RGCurabqrKc';
   var STRIPE_LOGO_IMAGE='/img/ripple-rocket-150x150.png';
 
@@ -25,6 +47,8 @@ $(function() {
 
   rippler = new Rippler();
   rippler.on('change:address', function() {
+    router.navigate(rippler.get('address'), { trigger: true }); 
+
   });
 
   function GatewayPayment(options) {
@@ -115,32 +139,16 @@ $(function() {
   var $buyXrpButton = $('#buyXrpButton');
   var $nameInput = $('input');
 
-  $nameInput.on('keyup', function(event) {
+  $('form').on('submit', function(event) {
     event.preventDefault();
     var address = $nameInput.val();
-    if (validNames[address]) {
-      return $buyXrpButton.removeClass('hidden');
-    }
-    if (invalidNames[address]) {
-      console.log('invalid name');
-      return $buyXrpButton.addClass('hidden');
-    }
     rippler.lookup(address, function(error, authInfo) {
-      console.log('got address', authInfo);
       if (error) {
-        console.log('ERROR', error);
       } else {
-        if (authInfo.address && authInfo.username === $nameInput.val()) {
-          console.log('and is valid');
-          validNames[authInfo.username] = authInfo.address;
-          $buyXrpButton.removeClass('hidden');
-          console.log(authInfo);
+        if (authInfo.address) {
+          rippler.set('address', authInfo.address);
         } else {
-          invalidNames[authInfo.username] = true
-          var address = $nameInput.val();
-          if (!validNames[address]) {
-            $buyXrpButton.addClass('hidden');
-          }
+          alert('invalid ripple address');
         }
       }
     });

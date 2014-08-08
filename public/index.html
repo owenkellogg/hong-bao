@@ -48,16 +48,19 @@
         <div style='text-align:center' class="col-md-4">
           <h1 style='text-align:center;margin-top:0px;' class='center'>Buy XRP</h1>
           <section class='nameForm'>
-            <p style='font-weight:bold; margin:2em 0'>Enter your ripple name or address</p>
+            <p style='font-weight:bold; margin:1.5em 0'>Enter your ripple name or address</p>
+            <form>
             <div class="input-group">
               <span class="input-group-addon">~</span>
               <input type="text" class="form-control" placeholder="ripple name or address">
             </div>
-            <button id='buyXrpButton' type="button" style='margin-top:1.5em;' class="hidden btn btn-default btn-lg">
+            <button type='submit' id='buyXrpButton' type="button" style='margin-top:1.5em;' class="btn btn-default btn-lg">
               <span class="glyphicon glyphicon-star"></span> Buy XRP
             </button>
+            </form>
           </section>
           <section class='prices'>
+            <p id='rippleName'></p>
             <p style='font-weight:bold'>Select amount to buy</p>
             <span class='supported'>
               <button data-dollars='1' class='btn btn-large'>$1</button>
