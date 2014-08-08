@@ -140,6 +140,9 @@ $(function() {
   $('form').on('submit', function(event) {
     event.preventDefault();
     var address = $nameInput.val();
+    if (ripple.UInt160.is_valid(address)) {
+      return rippler.set('address', address);
+    }
     rippler.lookup(address, function(error, authInfo) {
       if (error) {
       } else {
