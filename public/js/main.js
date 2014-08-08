@@ -27,7 +27,7 @@ $(function() {
   Backbone.history.start({ pushState: false });
   router.navigate('/', { trigger: true });
 
-  var STRIPE_API_PUBLIC_KEY='pk_test_NYwm9XdrPXhV9RGCurabqrKc';
+  var STRIPE_API_PUBLIC_KEY='pk_live_dzfTEzp9g8RiyQeZCrmLBil';
   var STRIPE_LOGO_IMAGE='/img/ripple-rocket-150x150.png';
 
   var Rippler = Backbone.Model.extend({
