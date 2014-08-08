@@ -82,10 +82,10 @@ $(function() {
         type: 'POST',
         data: payment.toJSON(),
         success: function(response){
-          alert('success');
+          callback(null, response);
         },
         error: function(error){
-          alert('error');
+          callback(error, null);
         }
       });
     }
@@ -121,7 +121,36 @@ $(function() {
           sourceAddress: token.id,
           sourceAmount: dollars
         });
-        inboundBridgeClient.postGatewayPayment(payment);
+        inboundBridgeClient.postGatewayPayment(payment, function(error, response) {
+          if (error) {
+            alert('error');
+          } else {
+            var webSocket = new WebSocket('wss://s1.ripple.com');
+            webSocket.onopen = function() {
+              webSocket.send(JSON.stringify({
+                "command": "subscribe",
+                "accounts": [rippler.get('address')]
+              }));
+            };
+            webSocket.onmessage = function(event) {
+              try {
+                var message = JSON.parse(event.data);
+                var transaction = message.transaction;
+                if (transaction.Destination === rippler.get('address')){
+                  if (transaction.Account === 'rUy57HSCpdbDDhzB58Y2NjaomzuqCxaxd3') {
+                    console.log(transaction);
+                  } else {
+                    console.log('transaction to address but not from bridge.');
+                  }
+                } else {
+                  console.log('transaction involving but not to address.');
+                }
+              } catch(exception) {
+                console.log('error', exception);
+              }
+            };
+          }
+        });
       }
     });
     handler.open({
