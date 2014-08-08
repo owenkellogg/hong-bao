@@ -154,4 +154,9 @@ $(function() {
       }
     });
   });
+
+  $('#mainHeader').on('click', function() {
+    rippler.set('address', null);
+    router.navigate('/', { trigger: true });
+  });
 })
