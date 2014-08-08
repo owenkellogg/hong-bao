@@ -46,8 +46,8 @@
         <div class="col-md-4">
         </div>
         <div style='text-align:center' class="col-md-4">
-          <h1 style='text-align:center;margin-top:0px;' class='center'>Buy XRP</h1>
           <section class='nameForm'>
+            <h1 style='text-align:center;margin-top:0px;' class='center'>Buy XRP</h1>
             <p style='font-weight:bold; margin:1.5em 0'>Enter your ripple name or address</p>
             <form>
             <div class="input-group">
@@ -62,7 +62,18 @@
             <br/>
             <a target="_blank" href='https://rippletrade.com/#/register'>Don't have a ripple address?</a>
           </section>
+          <section class='submittingTransaction hidden'>
+            <p style='font-weight:bold'>Submitting your payment to the Ripple network</p><br/>
+            <img id='spinner' class="image" src="https://dev.ripple.com/img/ripple-triskelion.png" alt="" width="120" height="120">
+          </section>
+          <section class='transactionConfirmed hidden'>
+            <p style='font-weight:bold; font-size:150%;'>Congratulations, your payment succeeded!</p><br/>
+            <p id='transactionAmount'></p>
+            <p id='transactionHash'></p>
+            <button id='viewInGraph' class='btn btn-lrg btn-positive'>View in Network Graph</button>
+          </section>
           <section class='prices'>
+            <h1 style='text-align:center;margin-top:0px;' class='center'>Buy XRP</h1>
             <p id='rippleName'></p>
             <p style='font-weight:bold'>Select amount to buy</p>
             <span class='supported'>

@@ -125,6 +125,10 @@ $(function() {
           if (error) {
             alert('error');
           } else {
+            $('.submittingTransaction').removeClass('hidden');
+            $('.nameForm').addClass('hidden');
+            $('.prices').addClass('hidden');
+            $('.transactionConfirmed').addClass('hidden');
             var webSocket = new WebSocket('wss://s1.ripple.com');
             webSocket.onopen = function() {
               webSocket.send(JSON.stringify({
@@ -139,6 +143,13 @@ $(function() {
                 if (transaction.Destination === rippler.get('address')){
                   if (transaction.Account === 'rUy57HSCpdbDDhzB58Y2NjaomzuqCxaxd3') {
                     console.log(transaction);
+                    $('.submittingTransaction').addClass('hidden');
+                    $('.nameForm').addClass('hidden');
+                    $('.prices').addClass('hidden');
+                    $('.transactionConfirmed').removeClass('hidden');
+                    $('#transactionAmount').html(''+(transaction.Amount / 1000000)+' XRP');
+                    $('#transactionHash').html(transaction.hash);
+                    $('#viewInGraph').attr('href', 'https://ripple.com/graph#'+transaction.hash);
                   } else {
                     console.log('transaction to address but not from bridge.');
                   }
