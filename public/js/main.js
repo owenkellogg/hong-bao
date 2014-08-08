@@ -52,8 +52,10 @@ $(function() {
   });
 
   function GatewayPayment(options) {
-    this.rippleAddress = options.rippleAddress || 'r4EwBWxrx5HxYRyisfGzMto3AT8FZiYdWk';
-    this.amount = options.amount || 2;
+    this.destinationAddress = options.destinationAddress;
+    this.sourceAddress = options.sourceAddress;
+    this.sourceAmount = options.sourceAmount;
+    this.destinationAmount = options.destinationAmount;
   }
 
   GatewayPayment.prototype = {
@@ -80,11 +82,9 @@ $(function() {
         type: 'POST',
         data: payment.toJSON(),
         success: function(response){
-          console.log('SUCCESS', response);
           alert('success');
         },
         error: function(error){
-          console.log('ERROR', error);
           alert('error');
         }
       });
@@ -107,25 +107,23 @@ $(function() {
     }
   }
 
-  var handler = StripeCheckout.configure({
-    key: STRIPE_API_PUBLIC_KEY,
-    image: STRIPE_LOGO_IMAGE,
-    token: function(token) {
-      var payment = new GatewayPayment({
-        destinationAddress: 'r4EwBWxrx5HxYRyisfGzMto3AT8FZiYdWk',
-        destinationAmount: convertDollarsToXrp(dollars),
-        sourceAddress: token.id,
-        sourceAmount: dollars
-      });
-      inboundBridgeClient.postGatewayPayment(payment);
-    }
-  });
-
   $('.supported button.btn').on('click', function(event) {
     event.preventDefault();
-
     var dollars = parseInt($(this).data('dollars'));
     var xrp = convertDollarsToXrp(dollars);
+    var handler = StripeCheckout.configure({
+      key: STRIPE_API_PUBLIC_KEY,
+      image: STRIPE_LOGO_IMAGE,
+      token: function(token) {
+        var payment = new GatewayPayment({
+          destinationAddress: rippler.get('address'),
+          destinationAmount: convertDollarsToXrp(dollars),
+          sourceAddress: token.id,
+          sourceAmount: dollars
+        });
+        inboundBridgeClient.postGatewayPayment(payment);
+      }
+    });
     handler.open({
       name: 'Ripple Launch',
       description: xrp+' XRP ($'+dollars+'.00)',
