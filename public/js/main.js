@@ -1,22 +1,60 @@
 
 $(function() {
+  _.templateSettings = { 
+      interpolate: /\{\{\=(.+?)\}\}/g,
+      evaluate: /\{\{(.+?)\}\}/g
+  };  
 
-  function convertDollarsToXrp(dollars) {
-    return Math.round((dollars / 0.006) * 0.97);
+  var STRIPE_API_PUBLIC_KEY='pk_test_NYwm9XdrPXhV9RGCurabqrKc';
+  var STRIPE_LOGO_IMAGE='/img/ripple-rocket-150x150.png';
+
+  var Rippler = Backbone.Model.extend({
+    lookup: function(name, callback) {
+      $.ajax({
+        type: 'GET',
+        url: 'https://id.ripple.com/v1/authinfo?username='+name,
+        success: function(authInfo) {
+          callback(null, authInfo);
+        },
+        error: function(error) {
+          callback(new Error('AuthServerError', null));
+        }
+      });
+    }   
+  }); 
+
+  rippler = new Rippler();
+  rippler.on('change:address', function() {
+  });
+
+  function GatewayPayment(options) {
+    this.rippleAddress = options.rippleAddress || 'r4EwBWxrx5HxYRyisfGzMto3AT8FZiYdWk';
+    this.amount = options.amount || 2;
   }
 
-  var handler = StripeCheckout.configure({
-    key: 'pk_test_NYwm9XdrPXhV9RGCurabqrKc',
-    image: '/img/ripple-rocket-150x150.png',
-    token: function(token) {
+  GatewayPayment.prototype = {
+    toJSON: function() {
+      return {
+        rippleAddress: this.destinationAddress,
+        stripeToken: this.sourceAddress,
+        amount: this.sourceAmount
+      }
+    }
+  }
+
+  function StripeInboundBridgeClient(options) {
+    if (!options.stripeApiKey) {
+      throw new Error('MissingStripeApiKey');
+    }
+    this.stripeApiKey = options.stripeApiKey;
+  }
+
+  StripeInboundBridgeClient.prototype = {
+    postGatewayPayment: function(payment, callback) {
       $.ajax({
         url: '/stripe',
         type: 'POST',
-        data: {
-          stripeToken: token.id,
-          rippleAddress: 'r4EwBWxrx5HxYRyisfGzMto3AT8FZiYdWk',
-          amount: 2
-        },
+        data: payment.toJSON(),
         success: function(response){
           console.log('SUCCESS', response);
           alert('success');
@@ -26,6 +64,36 @@ $(function() {
           alert('error');
         }
       });
+    }
+  };
+
+  function convertDollarsToXrp(dollars) {
+    return Math.round((dollars / 0.006) * 0.97);
+  }
+
+  var inboundBridgeClient = new StripeInboundBridgeClient({
+    stripeApiKey: STRIPE_API_PUBLIC_KEY
+  });
+
+  function PaymentClickHandler() {
+  }
+
+  PaymentClickHandler.prototype = {
+    handleClick: function() {
+    }
+  }
+
+  var handler = StripeCheckout.configure({
+    key: STRIPE_API_PUBLIC_KEY,
+    image: STRIPE_LOGO_IMAGE,
+    token: function(token) {
+      var payment = new GatewayPayment({
+        destinationAddress: 'r4EwBWxrx5HxYRyisfGzMto3AT8FZiYdWk',
+        destinationAmount: convertDollarsToXrp(dollars),
+        sourceAddress: token.id,
+        sourceAmount: dollars
+      });
+      inboundBridgeClient.postGatewayPayment(payment);
     }
   });
 
@@ -38,6 +106,43 @@ $(function() {
       name: 'Ripple Launch',
       description: xrp+' XRP ($'+dollars+'.00)',
       amount: dollars * 100
+    });
+  });
+
+  var validNames = {};
+  var invalidNames = {};
+
+  var $buyXrpButton = $('#buyXrpButton');
+  var $nameInput = $('input');
+
+  $nameInput.on('keyup', function(event) {
+    event.preventDefault();
+    var address = $nameInput.val();
+    if (validNames[address]) {
+      return $buyXrpButton.removeClass('hidden');
+    }
+    if (invalidNames[address]) {
+      console.log('invalid name');
+      return $buyXrpButton.addClass('hidden');
+    }
+    rippler.lookup(address, function(error, authInfo) {
+      console.log('got address', authInfo);
+      if (error) {
+        console.log('ERROR', error);
+      } else {
+        if (authInfo.address && authInfo.username === $nameInput.val()) {
+          console.log('and is valid');
+          validNames[authInfo.username] = authInfo.address;
+          $buyXrpButton.removeClass('hidden');
+          console.log(authInfo);
+        } else {
+          invalidNames[authInfo.username] = true
+          var address = $nameInput.val();
+          if (!validNames[address]) {
+            $buyXrpButton.addClass('hidden');
+          }
+        }
+      }
     });
   });
 })

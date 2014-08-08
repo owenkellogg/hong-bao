@@ -30,3 +30,6 @@ body {
   opacity:0.3;
 }
 
+.prices {
+  display:none;
+}
