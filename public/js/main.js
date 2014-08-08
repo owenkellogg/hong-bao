@@ -145,7 +145,7 @@ $(function() {
                 $('.transactionConfirmed').removeClass('hidden');
                 $('#transactionAmount').html(''+(transaction.Amount / 1000000)+' XRP');
                 $('#transactionHash').html(transaction.hash);
-                $('#viewInGraph').attr('href', 'https://ripple.com/graph#'+transaction.hash);
+                $('#viewInGraph').attr('href', 'https://ripple.com/graph/#/'+transaction.hash);
               } else {
                 console.log('transaction to address but not from bridge.');
               }
