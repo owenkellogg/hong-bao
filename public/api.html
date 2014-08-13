@@ -47,35 +47,13 @@
         </div>
         <div class="col-md-8">
         <pre>
-          GET /gateway/payments/from/10+USD/r4EwBWxrx5HxYRyisfGzMto3AT8FZiYdWk/XRP
-          request:
-          [{
-            "to_currency": "XRP",
-            "to_amount": "1670",
-            "to_address": "r4EwBWxrx5HxYRyisfGzMto3AT8FZiYdWk"
-            "from_currency": "USD" 
-            "from_amount: "10",
-            "from_address: null
-          }]
+          POST /stripe
+          {
+            "rippleAddress": RippleAddress,
+            "amount": USD,
+            "stripeToken": StripeToken
+          }
 
-          POST /gateway/payments
-          request:
-          {
-            "to_currency": "XRP",
-            "to_amount": "1670",
-            "to_address": "r4EwBWxrx5HxYRyisfGzMto3AT8FZiYdWk"
-            "from_currency": "USD" 
-            "from_amount: "10",
-            "from_address: StripeToken
-          }
-          response:
-          {
-            "id" 55
-          }
-          
-          GET /gateway/payments/55/status
-          
-  
         </pre>
         </div>
         <div class="col-md-2">
