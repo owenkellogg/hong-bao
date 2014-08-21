@@ -28,7 +28,7 @@ $(function() {
   router.navigate('/', { trigger: true });
 
   var STRIPE_API_PUBLIC_KEY='pk_live_dzfTEzp9g8RiyQeZCrmLBilF';
-  var STRIPE_LOGO_IMAGE='/img/ripple-rocket-150x150.png';
+  var STRIPE_LOGO_IMAGE='/img/prc_flag_icon.png';
 
   var Rippler = Backbone.Model.extend({
     lookup: function(name, callback) {
@@ -48,7 +48,6 @@ $(function() {
   rippler = new Rippler();
   rippler.on('change:address', function() {
     router.navigate(rippler.get('address'), { trigger: true }); 
-
   });
 
   function GatewayPayment(options) {
@@ -165,9 +164,9 @@ $(function() {
       }
     });
     handler.open({
-      name: 'Ripple Launch',
-      description: xrp+' XRP ($'+dollars+'.00)',
-      amount: dollars * 100
+      name: 'Hong Bao',
+      description: dollars+' Dollars --> '+dollars * 6.15+' Yuan',
+      amount: dollars * 6.15
     });
   });
 
@@ -180,19 +179,11 @@ $(function() {
   $('form').on('submit', function(event) {
     event.preventDefault();
     var address = $nameInput.val();
-    if (ripple.UInt160.is_valid(address)) {
-      return rippler.set('address', address);
+    if (address) {
+      rippler.set('address', address);
+    } else {
+      alert('invalid Alipay username');
     }
-    rippler.lookup(address, function(error, authInfo) {
-      if (error) {
-      } else {
-        if (authInfo.address) {
-          rippler.set('address', authInfo.address);
-        } else {
-          alert('invalid ripple address');
-        }
-      }
-    });
   });
 
   $('#mainHeader').on('click', function() {
