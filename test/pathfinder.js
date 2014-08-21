@@ -1,3 +1,4 @@
+const PathFinder = require(__dirname+'/../lib/pathfinder.js');
 
 describe('PathFinder', function() {
 
@@ -5,12 +6,14 @@ describe('PathFinder', function() {
     var pathFinder = new PathFinder();
 
     pathFinder.buildPayment({
-      to_currency: 'CYN',
+      to_currency: 'CNY',
       from_currency: 'USD',
-      to_amount: 100,
+      from_amount: 5,
       username: 'yuhao'
     })
     .then(function(bridgePayment) {
+      payment = bridgePayment;
+      console.log('BRIDGE PAYMENT', bridgePayment);
       assert(bridgePayment.rippleTransaction.id > 0);
       assert(bridgePayment.externalTransaction.id > 0);
       assert(bridgePayment.gatewayTransaction.id > 0);
@@ -18,7 +21,8 @@ describe('PathFinder', function() {
       assert(bridgePayment.destinationRippleAddress.id > 0);
       assert(bridgePayment.sourceRippleAddress.id > 0);
       assert(bridgePayment.policy.id > 0);
-    });
+    })
+    .error(console.log);
   });
 });
 
