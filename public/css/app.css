@@ -7,3 +7,20 @@ html {
     -webkit-backface-visibility: visible;
     backface-visibility: visible;
 }
+
+.send-money {
+    font-size: 14px;
+    margin-left: 4px;
+}
+
+.navbar-inverse {
+    background: #c10303; /* Old browsers */
+    background: -moz-linear-gradient(top,  #c10303 0%, #af0303 44%, #910000 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c10303), color-stop(44%,#af0303), color-stop(100%,#910000)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #c10303 0%,#af0303 44%,#910000 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #c10303 0%,#af0303 44%,#910000 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #c10303 0%,#af0303 44%,#910000 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #c10303 0%,#af0303 44%,#910000 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c10303', endColorstr='#910000',GradientType=0 ); /* IE6-9 */
+    border: red;
+}
