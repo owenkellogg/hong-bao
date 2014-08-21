@@ -26,6 +26,7 @@
         </style>
         <link rel="stylesheet" href="css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/app.css">
 
         <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     </head>
@@ -33,11 +34,11 @@
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-    <div style='background-color:black;' class="navbar navbar-inverse navbar-top" role="navigation">
+    <div style='background-color:red;' class="navbar navbar-inverse navbar-top" role="navigation">
 
       <p id='mainHeader' style='text-align:center; margin-top:10px;'>
-        <img style='text-align:center; height:50px' src='/img/ripple-rocket-150x150.png'/> 
-        <span style='font-size:150%; color:white'>Ripple Launch</span> 
+        <!--<img style='text-align:center; height:50px' src='/img/ripple-rocket-150x150.png'/> -->
+        <span style='font-size:150%; color:white'>Hongbao</span>
       </p>
     </div>
     <div class="container">
@@ -47,23 +48,24 @@
         </div>
         <div style='text-align:center' class="col-md-4">
           <section class='nameForm'>
-            <h1 style='text-align:center;margin-top:0px;' class='center'>Buy XRP</h1>
-            <p style='font-weight:bold; margin:1.5em 0'>Enter your ripple name or address</p>
+            <h1 style='text-align:center;margin-top:0px;' class='center'>Send Yuan to Alipay</h1>
+            <p style='font-weight:bold; margin:1.5em 0'>Enter Alipay username</p>
             <form>
             <div class="input-group">
               <span class="input-group-addon">~</span>
-              <input type="text" class="form-control" placeholder="ripple name or address">
+              <input type="text" class="form-control" placeholder="Alipay username">
             </div>
-            <button type='submit' id='buyXrpButton' type="button" style='margin-top:1.5em;' class="btn btn-primary btn-lg">
-              <span class="glyphicon glyphicon-star"></span> Buy XRP
+            <button type='submit' id='buyXrpButton' type="button" style='margin-top:1.5em;' class="btn btn-danger btn-lg">
+                Send
+                <span class="glyphicon glyphicon-play send-money"></span>
             </button>
             </form>
             <br/>
             <br/>
-            <a target="_blank" href='https://rippletrade.com/#/register'>Don't have a ripple address?</a>
+            <a target="_blank" href='http://global.alipay.com/ospay/home.htm'>Don't have a Alipay account?</a>
           </section>
           <section class='submittingTransaction hidden'>
-            <p style='font-weight:bold'>Submitting your payment to the Ripple network</p><br/>
+            <p style='font-weight:bold'>Submitting your payment to Alipay</p><br/>
             <img id='spinner' class="image" src="https://dev.ripple.com/img/ripple-triskelion.png" alt="" width="120" height="120">
           </section>
           <section class='transactionConfirmed hidden'>
@@ -73,9 +75,9 @@
             <a target="_blank" id='viewInGraph'><button class='btn btn-lg btn-primary'>View in Network Graph</button></a>
           </section>
           <section class='prices'>
-            <h1 style='text-align:center;margin-top:0px;' class='center'>Buy XRP</h1>
+            <h1 style='text-align:center;margin-top:0px;' class='center'>Send USD</h1>
             <p id='rippleName'></p>
-            <p style='font-weight:bold'>Select amount to buy</p>
+            <p style='font-weight:bold'>Select amount to send</p>
             <span class='supported'>
               <button data-dollars='1' class='btn btn-large'>$1</button>
               <button data-dollars='2' class='btn btn-large even'>$2</button>
